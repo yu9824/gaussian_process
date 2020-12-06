@@ -27,8 +27,8 @@ class gaussian_process:
     
     def fit(self, X, y, kernel = None, alpha = 1E-10, scale = True):
         # クラス変数化
-        self.X = X
-        self.y = y
+        self.X = np.array(X)
+        self.y = np.array(y)
 
         self.best_estimator = GaussianProcessRegressor(kernel = kernel, alpha=alpha)
 
@@ -39,16 +39,16 @@ class gaussian_process:
         if scale:
             scaled_y, self.scaler_y = self._scale(self.y)
         else:
-            scaled_y = y
+            scaled_y = self.y
             self.scaler_y = None
 
-        self.best_estimator.fit(X, scaled_y)
+        self.best_estimator.fit(self.X, scaled_y)
 
     
     def cross_validation(self, X, y, cv = 5, scoring = 'neg_mean_squared_error', scale = True, fit = True):
         # クラス変数化
-        self.X = X
-        self.y = y
+        self.X = np.array(X)
+        self.y = np.array(y)
 
         self.y = self.y.reshape(-1, 1)
         cv = min(cv, self.y.shape[0])
@@ -64,8 +64,8 @@ class gaussian_process:
         kernels = [ConstantKernel() * DotProduct() + WhiteKernel(),
             ConstantKernel() * RBF() + WhiteKernel(),
             ConstantKernel() * RBF() + WhiteKernel() + ConstantKernel() * DotProduct(),
-            ConstantKernel() * RBF(np.ones(X.shape[1])) + WhiteKernel(),
-            ConstantKernel() * RBF(np.ones(X.shape[1])) + WhiteKernel() + ConstantKernel() * DotProduct(),
+            ConstantKernel() * RBF(np.ones(self.X.shape[1])) + WhiteKernel(),
+            ConstantKernel() * RBF(np.ones(self.X.shape[1])) + WhiteKernel() + ConstantKernel() * DotProduct(),
             ConstantKernel() * Matern(nu=1.5) + WhiteKernel(),
             ConstantKernel() * Matern(nu=1.5) + WhiteKernel() + ConstantKernel() * DotProduct(),
             ConstantKernel() * Matern(nu=0.5) + WhiteKernel(),
