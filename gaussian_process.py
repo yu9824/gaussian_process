@@ -147,7 +147,7 @@ class gaussian_process:
         self._formatting()
 
         # figsizeについて
-        if None in figsize or figsize is None:
+        if all(None in s for s in figsize) or figsize is None:
             figsize = rcParams["figure.figsize"]
 
         # 図の生成
