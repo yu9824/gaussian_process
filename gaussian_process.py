@@ -135,9 +135,9 @@ class gaussian_process:
         self.ax.set_ylabel(ylabel)
 
         # plot
-        self.ax.plot(self.plot_X, self.mu, color = '#022C5E')
-        self.ax.scatter(self.X, self.y, color = 'black')
-        self.ax.fill_between(self.plot_X.squeeze(), (self.mu - 1.9600 * self.sigma).squeeze(), (self.mu + 1.9600 * self.sigma).squeeze(), zorder = 0, color = '#0572F7')
+        self.ax.plot(self.plot_X, self.mu, color = '#022C5E', label = 'mean', zorder = 1)
+        self.ax.scatter(self.X, self.y, color = 'black', label = 'sample', zorder = 2)
+        self.ax.fill_between(self.plot_X.squeeze(), (self.mu - 1.9600 * self.sigma).squeeze(), (self.mu + 1.9600 * self.sigma).squeeze(), zorder = 0, color = '#0572F7', label = '95 % confidence interval')
 
         return self.fig, self.ax
 
