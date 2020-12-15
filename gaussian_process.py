@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 from matplotlib import rcParams
 import pandas as pd
 import numpy as np
@@ -135,9 +136,9 @@ class gaussian_process:
         self.ax.set_ylabel(ylabel)
 
         # plot
-        self.ax.plot(self.plot_X, self.mu, color = '#022C5E')
-        self.ax.scatter(self.X, self.y, color = 'black')
-        self.ax.fill_between(self.plot_X.squeeze(), (self.mu - 1.9600 * self.sigma).squeeze(), (self.mu + 1.9600 * self.sigma).squeeze(), zorder = 0, color = '#0572F7')
+        self.ax.plot(self.plot_X, self.mu, color = '#022C5E', label = 'mean', zorder = 1)
+        self.ax.scatter(self.X, self.y, color = 'black', label = 'sample', zorder = 2)
+        self.ax.fill_between(self.plot_X.squeeze(), (self.mu - 1.9600 * self.sigma).squeeze(), (self.mu + 1.9600 * self.sigma).squeeze(), zorder = 0, color = '#0572F7', label = '95 % confidence interval')
 
         return self.fig, self.ax
 
@@ -147,7 +148,7 @@ class gaussian_process:
         self._formatting()
 
         # figsizeについて
-        if None in figsize or figsize is None:
+        if all(None in s for s in figsize) or figsize is None:
             figsize = rcParams["figure.figsize"]
 
         # 図の生成
@@ -173,15 +174,18 @@ class gaussian_process:
         if None in figsize or figsize is None:
             figsize = rcParams["figure.figsize"]
 
+        #gridspecで互いにサイズの違うsubplotを作成
+        gridspec_master = GridSpec(2, 1, height_ratios = [3, 1])
+        print('反映されてる？')
 
         # 図の生成
         self.fig = plt.figure(facecolor = 'white', figsize = figsize)
-        self.ax = self.fig.add_subplot(211)
+        self.ax = self.fig.add_subplot(gridspec_master[0])
 
         self._plot_gp_results(offset, ylabel)
 
         # 獲得関数の図
-        self.ax2 = self.fig.add_subplot(212)
+        self.ax2 = self.fig.add_subplot(gridspec_master[1])
 
         # 獲得関数のy軸方向の値を得る
         acq, acq_name = af()
