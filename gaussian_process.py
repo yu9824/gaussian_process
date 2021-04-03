@@ -10,23 +10,40 @@ from sklearn.preprocessing import StandardScaler
 from scipy.stats import norm
 
 
-class gaussian_process:
+class GaussianProcess:
     def __init__(self):
         # np.arrayを0で割ったときのWarningを無視するためのコード
         np.seterr(divide='ignore', invalid='ignore')
 
     def _scale(self, x):
+        x = np.array(x).reshape(-1, 1)
         scaler = StandardScaler().fit(x)
         scaled_x = scaler.transform(x)
         return scaled_x, scaler
     
     def _inverse_scale(self, scaler_y, mu, sigma):
+        mu = np.array(mu).reshape(-1, 1)
         inversed_mu = scaler_y.inverse_transform(mu)
         inversed_sigma = sigma.reshape(-1, 1) * scaler_y.scale_
         return inversed_mu, inversed_sigma
 
     
     def fit(self, X, y, kernel = None, alpha = 1E-10, scale = True):
+        """fit
+
+        Parameters
+        ----------
+        X : list or something
+            [description]
+        y : list or something
+            [description]
+        kernel : callable, optional
+            [description], by default None
+        alpha : float, optional
+            [description], by default 1E-10
+        scale : bool, optional
+            [description], by default True
+        """
         # クラス変数化
         self.X = np.array(X)
         self.y = np.array(y)
@@ -47,6 +64,23 @@ class gaussian_process:
 
     
     def cross_validation(self, X, y, cv = 5, scoring = 'neg_mean_squared_error', scale = True, fit = True):
+        """You can decide kernels by using cross validation. You don't have to do this if you've already decide which kernels do you use.
+
+        Parameters
+        ----------
+        X : list or something
+            [description]
+        y : list or something
+            [description]
+        cv : int, optional
+            [description], by default 5
+        scoring : str, optional
+            [description], by default 'neg_mean_squared_error'
+        scale : bool, optional
+            [description], by default True
+        fit : bool, optional
+            [description], by default True
+        """
         # クラス変数化
         self.X = np.array(X)
         self.y = np.array(y)
@@ -144,11 +178,28 @@ class gaussian_process:
 
     
     def plot(self, offset = 0.05, xlabel = None, ylabel = None, figsize = (None, None)):
+        """[summary]
+
+        Parameters
+        ----------
+        offset : float, optional
+            [description], by default 0.05
+        xlabel : [type], optional
+            [description], by default None
+        ylabel : [type], optional
+            [description], by default None
+        figsize : tuple, optional
+            [description], by default (None, None)
+
+        Returns
+        -------
+        matplot.pyplot.figure, matplot.pyplot.axis
+        """
         # フォーマットを綺麗に
         self._formatting()
 
         # figsizeについて
-        if all(None in s for s in figsize) or figsize is None:
+        if all(None is s for s in figsize) or figsize is None:
             figsize = rcParams["figure.figsize"]
 
         # 図の生成
@@ -166,6 +217,25 @@ class gaussian_process:
 
     
     def plot_with_acq(self, acquisition_function, offset = 0.05, xlabel = None, ylabel = None, figsize = (None, None)):
+        """[summary]
+
+        Parameters
+        ----------
+        acquisition_function : callable
+            [description]
+        offset : float, optional
+            [description], by default 0.05
+        xlabel : [type], optional
+            [description], by default None
+        ylabel : [type], optional
+            [description], by default None
+        figsize : tuple, optional
+            [description], by default (None, None)
+
+        Returns
+        -------
+        matplot.pyplot.figure, matplot.pyplot.axis, matplot.pyplot.axis
+        """
         # フォーマットを綺麗に
         self._formatting()
 
