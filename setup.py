@@ -5,7 +5,7 @@ with open('requirements.txt') as requirements_file:
 
 setup(
     name='gaussian_process',
-    version='0.0.5',
+    version='0.0.6',
     description='',
     author='yu-9824',
     author_email='yu.9824{0}gmail.com'.format('@'),
