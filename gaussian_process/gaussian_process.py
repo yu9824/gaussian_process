@@ -250,7 +250,6 @@ class GaussianProcess:
 
         #gridspecで互いにサイズの違うsubplotを作成
         gridspec_master = GridSpec(2, 1, height_ratios = [3, 1])
-        print('反映されてる？')
 
         # 図の生成
         self.fig = plt.figure(facecolor = 'white', figsize = figsize)
