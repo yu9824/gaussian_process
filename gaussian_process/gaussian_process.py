@@ -50,8 +50,8 @@ class GaussianProcess:
             [description], by default True
         """
         # クラス変数化
-        self.X = np.array(X)
-        self.y = np.array(y)
+        self.X = np.array(X).reshape(-1, 1)
+        self.y = np.array(y).reshape(-1, 1)
 
         self.best_estimator = GaussianProcessRegressor(kernel = kernel, alpha=alpha)
 
@@ -87,10 +87,9 @@ class GaussianProcess:
             [description], by default True
         """
         # クラス変数化
-        self.X = np.array(X)
-        self.y = np.array(y)
+        self.X = np.array(X).reshape(-1, 1)
+        self.y = np.array(y).reshape(-1, 1)
 
-        self.y = self.y.reshape(-1, 1)
         cv = min(cv, self.y.shape[0])
         
         # 目的変数を正規化
