@@ -134,7 +134,7 @@ class GaussianProcess:
 
         if fit:
             # fitさせる
-            self.best_estimator.fit(X, scaled_y)
+            self.best_estimator.fit(self.X, scaled_y)
 
         
     def predict(self, plot_X):
