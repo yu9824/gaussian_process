@@ -346,30 +346,4 @@ class GaussianProcess:
 
 
 if __name__ == '__main__':
-    plot_X = np.linspace(0, 7, 701).reshape(-1, 1)
-    X = np.array([0, 1, 2, 3, 5]).reshape(-1, 1)
-    y = np.sin(X)
-    xlabel = None
-    ylabel = None
-    
-    # インスタンスの生成
-    gp = gaussian_process()
-
-    # best_estimatorを決め，fitまで終える
-    # best_estimator = gp.cross_validation(X, y)
-    best_estimator = gp.fit(X, y, kernel = ConstantKernel() * Matern(nu=1.5) + WhiteKernel(), alpha=0)
-
-    # predict
-    mu, sigma = gp.predict(best_estimator, plot_X, scaler_y = gp.scaler_y)
-
-    # 獲得関数の定義
-    EI = gp.expected_improvement(best_estimator, plot_X, X, y)
-    print(EI.get_optimum())
-
-    # plot
-    # gp.plot(plot_X, mu, sigma, xlabel=xlabel, ylabel = ylabel)
-    gp.plot_with_acq(plot_X, X, y, mu, sigma, EI, xlabel = xlabel, ylabel = ylabel)
-
-
-    plt.show()
-    # print(gp.best_kernel_)
+    pass
